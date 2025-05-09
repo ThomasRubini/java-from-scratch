@@ -4,11 +4,13 @@ set -e
 # Create the build directory if it doesn't exist
 mkdir -p build
 
+find src -name "*.java" > build/sources.txt
+
 # Loop through all .java files in the src directory
 for dir in $(find src -type d); do
     # Check if the directory contains at least one .java file
     if find "$dir" -maxdepth 1 -name "*.java" | grep -q .; then
-        javac -d build/classes -cp build/classes "$dir"/*.java
+        javac -d build/classes "$dir"/*.java @build/sources.txt
     fi
 done
 
