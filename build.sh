@@ -1,13 +1,15 @@
 #!/bin/bash
-set -xe
+set -e
 
 # Create the build directory if it doesn't exist
 mkdir -p build
 
 # Loop through all .java files in the src directory
-for file in $(find src -name "*.java"); do
-    # Compile each .java file into the build directory
-    javac -d build/classes "$file"
+for dir in $(find src -type d); do
+    # Check if the directory contains at least one .java file
+    if find "$dir" -maxdepth 1 -name "*.java" | grep -q .; then
+        javac -d build/classes -cp build/classes "$dir"/*.java
+    fi
 done
 
 # Create a JAR file from the compiled classes with a Main-Class attribute
